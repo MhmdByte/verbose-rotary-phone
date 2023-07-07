@@ -46,13 +46,7 @@ returntoroom = False
 
 
 
-url = "https://pastebin.com/raw/756HQFCK"
-data =  requests.get(url).text
 
-if "True" in data:
-    pass
-else:
-    exit()
 
 roomp = False
 number = 0
