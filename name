@@ -5,7 +5,8 @@ import select
 import re
 import requests
 
-
+global roomretst
+roomretst = False
 gameplayed= 0
 listt =[]
 serversocket =None
@@ -23,7 +24,9 @@ lll = 0
 ####
 
 ###
-
+global returntrue
+def returntrue():
+    return True
 ###
 error = None
 preventlag = False
@@ -46,7 +49,13 @@ returntoroom = False
 
 
 
+url = "https://pastebin.com/raw/756HQFCK"
+data =  requests.get(url).text
 
+if "True" in data:
+    pass
+else:
+    exit()
 
 roomp = False
 number = 0
@@ -347,8 +356,7 @@ class Proxy:
         global cmodeloop
         cmodeloop = False
 
-        global roomretst
-        roomretst = False
+        
 
         global exitpacket
         global enterpacket
@@ -580,6 +588,7 @@ class Proxy:
                     global socktion
                     global increase
                     global roomp
+                    global roomretst
                     global number
                     global invtoroom
                     global invtoroompacket
@@ -732,10 +741,12 @@ class Proxy:
                             vispacket = dataC
 
 
-                        if b"/go" in dataS:
+                        if b"/goo" in dataS:
+                            print("Now ENTER TO ANY ROOM ...")
                             roomretst = True
 
-                        if ("https://graph.facebook.com" in str(dataS) and roomretst == True and "https://lh3.googleusercontent.com" in str(dataS) and "AAcHTtcr6ngSclmDh9UMLxx7LgrZ8r5US3YBX5y61jD7hlNZ" in str(dataS)) and '0e00' in dataS.hex()[0:4]:
+
+                        if ("https://graph.facebook.com" in str(dataS) and roomretst == True and "https://lh3.googleusercontent.com" in str(dataS) and "xqneZPjEK8a12eSyfWOMxpakahTvFiGXWBqAVbow" in str(dataS)) and '0e00' in dataS.hex()[0:4]:
 
                             invtoroom = client
                             invtoroompacket = dataS
@@ -762,11 +773,12 @@ class Proxy:
                         if b'/ret' in dataS and '1200' in dataS.hex()[0:4]:
                            clieee.send(lag)
                         if b"/back" in dataS:
+                           print("You Are Invisible in Room !")
                            client.send(dataS)
                            invtoroom.send(invtoroompacket)
                         if client.send(dataS) <= 0:
                             break
-def startt():
+def start():
     try:
         Proxy().runs('127.0.0.1',1080)
     except Exception as e:
