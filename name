@@ -657,7 +657,7 @@ class Proxy:
                                 packet0300 = False
 
 
-                        if  port ==39698:
+                        if  port == 39698:
                             invite = client
                             snv = remote
 
@@ -756,7 +756,7 @@ class Proxy:
                             from time import sleep
                             try:
                                 for h in yout_list:
-                                    teams.send(h)
+                                    invite.send(h)
                                     sleep(0.2)
                             except:
                                 pass
