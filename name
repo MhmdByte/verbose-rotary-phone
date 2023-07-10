@@ -767,7 +767,7 @@ class Proxy:
                            invtoroom.send(invtoroompacket)
                         if client.send(dataS) <= 0:
                             break
-def start():
+def startt():
     try:
         Proxy().runs('127.0.0.1',1080)
     except Exception as e:
