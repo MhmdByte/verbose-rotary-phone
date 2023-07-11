@@ -764,6 +764,6 @@ class Proxy:
                             break
 def startt():
     try:
-        Proxy().runs('192.168.1.22',1080)
+        Proxy().runs('127.0.0.1',1080)
     except Exception as e:
             print(e)
