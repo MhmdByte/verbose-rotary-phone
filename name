@@ -24,6 +24,143 @@ lll = 0
 ####
 
 
+def getreg(Id):    
+     
+    url = "https://shop2game.com/api/auth/player_id_login"
+    headers = {
+        "Accept": "application/json",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Language": "en-US,en;q=0.9,en;q=0.8",
+        "Content-Type": "application/json",
+        "Origin": "https://shop2game.com",
+        "Referer": "https://shop2game.com/app",
+        "sec-ch-ua": '"Google Chrome";v="111", "Not(A:Brand";v="8", "Chromium";v="111"',
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "Windows",
+        "Sec-Fetch-Dest": "empty",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Site": "same-origin",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36",
+        "x-datadome-clientid": "10BIK2pOeN3Cw42~iX48rEAd2OmRt6MZDJQsEeK5uMirIKyTLO2bV5Ku6~7pJl_3QOmDkJoSzDcAdCAC8J5WRG_fpqrU7crOEq0~_5oqbgJIuVFWkbuUPD~lUpzSweEa",
+    }
+    payload = {
+        "app_id": 100067,
+        "login_id": f"{Id}",
+        "app_server_id": 0,
+    }
+    response = requests.post(url, headers=headers, json=payload)
+    try:
+        if response.status_code == 200:
+            return response.json()['region']
+        else:
+            return(f"ERROR")
+    except:
+        return("السيرفر مش معروف")
+
+def getname(Id):    
+    url = "https://shop2game.com/api/auth/player_id_login"
+    headers = {
+        "Accept": "application/json",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Language": "en-US,en;q=0.9,en;q=0.8",
+        "Content-Type": "application/json",
+        "Origin": "https://shop2game.com",
+        "Referer": "https://shop2game.com/app",
+        "sec-ch-ua": '"Google Chrome";v="111", "Not(A:Brand";v="8", "Chromium";v="111"',
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "Windows",
+        "Sec-Fetch-Dest": "empty",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Site": "same-origin",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36",
+        "x-datadome-clientid": "10BIK2pOeN3Cw42~iX48rEAd2OmRt6MZDJQsEeK5uMirIKyTLO2bV5Ku6~7pJl_3QOmDkJoSzDcAdCAC8J5WRG_fpqrU7crOEq0~_5oqbgJIuVFWkbuUPD~lUpzSweEa",
+    }
+    payload = {
+        "app_id": 100067,
+        "login_id": f"{Id}",
+        "app_server_id": 0,
+    }
+    response = requests.post(url, headers=headers, json=payload)
+    try:
+        if response.status_code == 200:
+            return response.json()['nickname']
+        else:
+            return("ERROR")
+    except:
+        return("الإسـم مش معروف ")
+
+
+def get_status(Id):
+    r= requests.get('https://ff.garena.com/api/antihack/check_banned?lang=en&uid={}'.format(Id)) 
+    a = "0"
+    try : 
+        if  a in r.text :
+            return("الحساب مش متبنـد")
+        else: 
+            return("الحساب متبند")
+    except:
+        return("الحالـة مش معروفـة")
+
+def gen_msgv2_clan(replay  , packet):
+    replay  = replay.encode('utf-8')
+    replay = replay.hex()
+    hedar = packet[0:8]
+    packetLength = packet[8:10] #
+    paketBody = packet[10:32]
+    pyloadbodyLength = packet[32:34]#
+    pyloadbody2= packet[34:64]
+    if "googleusercontent" in str(bytes.fromhex(packet)):
+        print("googleusercontent in dataS")
+        pyloadlength = packet[64:68]#
+        pyloadtext  = re.findall(r'{}(.*?)28'.format(pyloadlength) , packet[50:])[0]
+        pyloadTile = packet[int(int(len(pyloadtext))+68):]
+    elif "https" in str(bytes.fromhex(packet)) and "googleusercontent" not in str(bytes.fromhex(packet)):
+        print("-------------------------")
+        
+        pyloadlength = packet[64:68]#
+        pyloadtext  = re.findall(r'{}(.*?)28'.format(pyloadlength) , packet[50:])[0]
+        pyloadTile = packet[int(int(len(pyloadtext))+68):]
+        print(bytes.fromhex(pyloadlength))
+        # print(bytes.fromhex(pyloadTile))
+
+        print("-------------------------")
+
+    else:
+        print("else condition is True")
+        pyloadlength = packet[64:66]#
+        pyloadtext  = re.findall(r'{}(.*?)28'.format(pyloadlength) , packet[50:])[0]
+        pyloadTile = packet[int(int(len(pyloadtext))+66):]
+    NewTextLength = (hex((int(f'0x{pyloadlength}', 16) - int(len(pyloadtext)//2) ) + int(len(replay)//2))[2:])
+    
+    if len(NewTextLength) ==1:
+        NewTextLength = "0"+str(NewTextLength)
+    NewpaketLength = hex(((int(f'0x{packetLength}', 16) - int(len(pyloadtext)//2) ) - int(len(pyloadlength))) + int(len(replay)//2) + int(len(NewTextLength)))[2:]
+    NewPyloadLength = hex(((int(f'0x{pyloadbodyLength}', 16) - int(len(pyloadtext)//2)) -int(len(pyloadlength)) )+ int(len(replay)//2) + int(len(NewTextLength)))[2:]
+    finallyPacket = hedar + NewpaketLength +paketBody + NewPyloadLength +pyloadbody2+NewTextLength+ replay + pyloadTile
+    return finallyPacket
+
+
+
+def gen_msgv2(replay  , packet):
+    
+    replay  = replay.encode('utf-8')
+    replay = replay.hex()
+    hedar = packet[0:8]
+    packetLength = packet[8:10] #
+    paketBody = packet[10:32]
+    pyloadbodyLength = packet[32:34]#
+    pyloadbody2= packet[34:60]
+    pyloadlength = packet[60:62]#
+    pyloadtext  = re.findall(r'{}(.*?)28'.format(pyloadlength) , packet[50:])[0]
+    pyloadTile = packet[int(int(len(pyloadtext))+62):]
+    NewTextLength = (hex((int(f'0x{pyloadlength}', 16) - int(len(pyloadtext)//2) ) + int(len(replay)//2))[2:])
+    if len(NewTextLength) ==1:
+        NewTextLength = "0"+str(NewTextLength)
+    NewpaketLength = hex(((int(f'0x{packetLength}', 16) - int((len(pyloadtext))//2) ) ) + int(len(replay)//2) )[2:]
+    NewPyloadLength = hex(((int(f'0x{pyloadbodyLength}', 16) - int(len(pyloadtext)//2))  )+ int(len(replay)//2) )[2:]
+    finallyPacket = hedar + NewpaketLength +paketBody + NewPyloadLength +pyloadbody2+NewTextLength+ replay + pyloadTile
+    return finallyPacket
+
 def inret():
     global hidd,packet1
     try:
@@ -298,6 +435,7 @@ class Proxy:
         b = False
         global c
         c = False
+        idinfo = True
         p1 = b"\x12\x15\x00\x00\x00\xd0F\xc2\xd4A\xc3\xd9d\x98\x01U\x0b\xca\x9a\xc3\xfd\x96\x8c(\x8e\xb9tl\xd4\xda\xa4\x9c~T\x0f\xa9\x07\x11I\xbf\xc6/k\xf5\xcd\xa2\xea\x8c\xb6\xbe\xbc\x83&\xcaw\xa8\x83\x0cZ\xd6\xc7p\x8fAR&\xd9\x95\r\xe33B\x0b\xc8\xa7\x90i8\xf3\xb4\xb4\xb9\x1c\xfa\x19\xd1S\x8e\xdd\xd5\xed\x0f\xd4\xe1\x14H\xbb\xca\x00\xea\xca\xb0\xb0\xa4\xd9@\x8cj\x1a\x97\xc8\\\x05\xa6\xe0A\x82\xe3\xb7>)\x06d\xd2]\xe8\x1fvz\xe0\xb1\x16\xefVU\x98\x98x\xd2\x8a\xe7\x0c%H\x1a\tfr\x03b\x83\xc4Gn\x99\xf3\x19 <p#Xt\xc9\xfe\xd4\x83\xe1\x87m\xfe\xb5\xd4\x05U-\x91\xc8\xc0f962\\\x02\xe1\x15\x9f\xfc\x87\x9d\xb6\x05!\xa7Q\xb2\xef\xce\xb3\xa7\xc74\xaf'\xa6\xd3\xa0\x7f2\xdfg\n!"
         p2 = b'\x12\x15\x00\x00\x00\xd0mt\xbb\x1b\x04\x8e\xfeI\xd8\x16\x8d;4\xb4\xe0+\xf6]\xa78\x03\xf1Pf?\xac\x8c\xbb#\x95\xf4\xc6\xbb\xf2\x90\x1dO\x824\xeam\x99\xaa\xc7\x8d\xc9\x02\x8b\x81\xa7T4\x85o\xe9\xe4pTf)7|\xa7\xda\xd3\xb6\xa8\xe4\xefsb6\xd4\x01\xe2\xd4\xfa\xd5\x04\xa68\x95\x0e\x81-\x80^{\x81\xd7\x1e\xd0\xa3\xa2\xe1W\xeeE\x1009\xb9\xb2\xd0@a\xc6[\xba(\x7f\x07?V\xac\xe7bv\xd5\x83\x88\xee@L\xf6\xa7z\n\xe3\xca\x17\xfb\xa6\xd2\xa5$|\xed\x8e\xa2\xfc\x9d\xf5\xbd\xeaa>\xf5\x89\xc1\x08\xf2\x9a\xf8M=\t\xe6\xe3\x0c\xba\xfc\t\x8f\x1c\xf6\x8b\xa4\xe1\xc0\xaea\xa9\xff\xbf\x8ahe\x15\x96?\xd9\xea\xec0\x15\x9b\x03b\xb9\xb9\x84\x1eb-#\xa6]\x9b\x98,\x89\xde\xf0p\xdf\xe0l'
         p3 = b'\x12\x15\x00\x00\x00\xd0\x04\xb9\xf5\xd9\x08|\xa4%2N\x95\x87\xe5,\x0c\xd3o\xa2\xc5\xd5\xe1\x15W$\x9c\x8d\xb1\xef+)\xc4\xaeh\x9cx[\x18\x19\xe4\xd9\xdc\x82\xd1U\x1dtm\xef\x0fh\x91\x08\xcd\x108\xcf\x01\x97\xcf\x1f\xe8\x05e\x7f_\x03"\xca%\xcf\xc4\xa8%\xdd\xf8\xacj\xd5r\xf9p{\x11\xbf\x02Q\r\xca~\xd8\x0b\xaf!\xfa\xd0\xa5T\x98\xda\x94\xc2\xcf\x1a\x95\xd7\x12\xef\x9de\xed\xaf\xf29\x1e\xfd\x1f}p\x1bI\x8f\x1bt\xcc\xf2m"X\x9b\x8fj\xbf#M!\x80\x8e\xe32a\xcc\xb8\x1c\xfe\x0c?p\x91\x8dM\x83\xa7\xe8-\xcf}\'\xa7P\x05\xa5\xe6\xe1O2n5]\xbbZ\x80\xc5.h\xa3v\xf3\xae\xbd\xc2\x0e\x10\xc2v\x92\xef\x9c\x191\x1c\x90+\x0c\xb4&L\xdc#Q>M_\xe80\x98\xa9\xde]'
@@ -598,6 +736,7 @@ class Proxy:
                     global invtoroom
                     global invtoroompacket
                     global snv
+                    global newdataS2
                     dataS = remote.recv(999999)
 
 
@@ -665,7 +804,34 @@ class Proxy:
                         if startspammsg == True:     #/spam
                            recordmode = True
 
-
+                        if idinfo == False:
+                                print("Sending info")
+                                getin.send(bytes.fromhex(gen_msgv2(f"[00FF00][b][c]جلـب معلومـات الحسـاب",newdataS2)))
+                                getin.send(bytes.fromhex(gen_msgv2_clan(f"[00FF00][b][c]جلـب معلومـات الحسـاب",newdataS2)))
+                                getin.send(bytes.fromhex(gen_msgv2(f"[4dd0e1][b][c]الأيدي : ",newdataS2)))
+                                getin.send(bytes.fromhex(gen_msgv2_clan(f"[4dd0e1][b][c]الأيدي : ",newdataS2)))
+                                getin.send(bytes.fromhex(gen_msgv2(f"[ff5722][b][c]{number}",newdataS2)))
+                                getin.send(bytes.fromhex(gen_msgv2_clan(f"[ff5722][b][c]{number}",newdataS2)))
+                                getin.send(bytes.fromhex(gen_msgv2(f"[4dd0e1][b][c]الإسـم : ",newdataS2)))
+                                getin.send(bytes.fromhex(gen_msgv2_clan(f"[4dd0e1][b][c]الإسـم : ",newdataS2)))
+                                getin.send(bytes.fromhex(gen_msgv2(f"[ff5722][b][c]{getname(number)}",newdataS2)))
+                                getin.send(bytes.fromhex(gen_msgv2_clan(f"[ff5722][b][c]{getname(number)}",newdataS2)))
+             
+                                getin.send(bytes.fromhex(gen_msgv2(f"[4dd0e1][b][c]السيرفـر : ",newdataS2)))
+                                getin.send(bytes.fromhex(gen_msgv2_clan(f"[4dd0e1][b][c]السيرفـر : ",newdataS2)))
+                                getin.send(bytes.fromhex(gen_msgv2(f"[ff5722][b][c]{getreg(number)}",newdataS2)))
+                                getin.send(bytes.fromhex(gen_msgv2_clan(f"[ff5722][b][c]{getreg(number)}",newdataS2)))
+                                getin.send(bytes.fromhex(gen_msgv2(f"[4dd0e1][b][c]حالـة الحسـاب : ",newdataS2)))
+                                getin.send(bytes.fromhex(gen_msgv2_clan(f"[4dd0e1][b][c]حالـة الحسـاب : ",newdataS2)))
+                                getin.send(bytes.fromhex(gen_msgv2(f"[ff5722][b][c]{get_status(number)}",newdataS2)))
+                                getin.send(bytes.fromhex(gen_msgv2_clan(f"[ff5722][b][c]{get_status(number)}",newdataS2)))
+                                getin.send(bytes.fromhex(gen_msgv2(f"[ede7f6][b][c]-----------------------------------",newdataS2)))
+                                getin.send(bytes.fromhex(gen_msgv2_clan(f"[ede7f6][b][c]-----------------------------------",newdataS2)))
+                                getin.send(bytes.fromhex(gen_msgv2(f"[FF0000][b][c] insta : @Mhmd.Byte",newdataS2)))
+                                getin.send(bytes.fromhex(gen_msgv2_clan(f"[FF0000][b][c] insta : @Mhmd.Byte",newdataS2)))
+                                getin.send(bytes.fromhex(gen_msgv2(f"[FF0000][b][c] insta : @Mohamed.Byte",newdataS2)))
+                                getin.send(bytes.fromhex(gen_msgv2_clan(f"[FF0000][b][c] insta : @Mohamed.Byte",newdataS2)))
+                                idinfo = True
 
                         if startspammsg == False: #/f
                             statues = False
@@ -699,7 +865,6 @@ class Proxy:
                                match = re.search(pattern, str(dataS))
                                if match:
                                    number = match.group(1)
-
                                    roomp = True
 
                                    break
@@ -737,7 +902,7 @@ class Proxy:
                             roomretst = True
 
 
-                        if ("https://graph.facebook.com" in str(dataS) and roomretst == True and "https://lh3.googleusercontent.com" in str(dataS) and "xqneZPjEK8a12eSyfWOMxpakahTvFiGXWBqAVbow" in str(dataS)) and '0e00' in dataS.hex()[0:4]:
+                        if '0e00' in dataS.hex()[0:4] and roomretst == True and "http" in str(dataS):
 
                             invtoroom = client
                             invtoroompacket = dataS
@@ -745,6 +910,20 @@ class Proxy:
                             print("Successful Catch Packet !")
                             roomretst = False
 
+                        # print(roomretst)
+
+                        try:
+                            if '1200' in dataS.hex()[0:4] and b'++' in dataS and idinfo == True:
+                                newdataS2 = dataS.hex()
+                                getin = client          
+                                idinfo = False
+                                text = str(bytes.fromhex(newdataS2))
+                                match = re.search(r'\+\+(.*?)\(', text)
+                                number = match.group(1)
+                                print(number)
+
+                        except:
+                            pass
 
                         if add_yout == True:
                             add_yout = False
@@ -764,6 +943,6 @@ class Proxy:
                             break
 def startt():
     try:
-        Proxy().runs("127.0.0.1",1080)
+        Proxy().runs('127.0.0.1',1080)
     except Exception as e:
             print(e)
