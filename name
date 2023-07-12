@@ -128,7 +128,6 @@ def gen_msgv2_clan(replay  , packet):
     pyloadbodyLength = packet[32:34]#
     pyloadbody2= packet[34:64]
     if "googleusercontent" in str(bytes.fromhex(packet)):
-        print("googleusercontent in dataS")
         pyloadlength = packet[64:68]#
         pyloadtext  = re.findall(r'{}(.*?)28'.format(pyloadlength) , packet[50:])[0]
         pyloadTile = packet[int(int(len(pyloadtext))+68):]
@@ -144,7 +143,6 @@ def gen_msgv2_clan(replay  , packet):
         print("-------------------------")
 
     else:
-        print("else condition is True")
         pyloadlength = packet[64:66]#
         pyloadtext  = re.findall(r'{}(.*?)28'.format(pyloadlength) , packet[50:])[0]
         pyloadTile = packet[int(int(len(pyloadtext))+66):]
