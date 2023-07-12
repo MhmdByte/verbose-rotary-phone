@@ -754,6 +754,8 @@ class Proxy:
                     global invtoroompacket
                     global snv
                     global newdataS2
+                    global packet1
+
                     dataS = remote.recv(999999)
 
 
