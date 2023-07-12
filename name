@@ -4,6 +4,7 @@ import threading
 import select
 import re
 import requests
+from datetime import datetime
 
 global roomretst
 roomretst = False
@@ -19,11 +20,28 @@ increase =False
 socktion =None
 SOCKS_VERSION = 5
 packet =b''
-lll = 0
+full = False
 #
 ####
 
+def getdate(playerid):
+    global data,dc
+    data = requests.get(f"https://server.shay444ofc.vercel.app/api/data/{playerid}").text
+    dc = data[9:19]
+    return dc
+def getdate2():
 
+    try:
+        old_date = datetime.strptime(dc, "%d/%m/%Y")
+        now = datetime.now()
+        delta = now - old_date
+        years = delta.days // 365
+        months = (delta.days % 365) // 30
+        days = (delta.days % 365) % 30
+        return f"{years} سـنـوات \n\n{months} شـهـور \n\n{days} يـوم "
+    except:
+        return "غير معروف"
+    
 def getreg(Id):    
      
     url = "https://shop2game.com/api/auth/player_id_login"
@@ -513,6 +531,7 @@ class Proxy:
         global cmodeloop
         cmodeloop = False
 
+        global full
 
 
         global exitpacket
@@ -616,7 +635,7 @@ class Proxy:
             ######################################
             r, w, e = select.select([client, remote], [], [])
             global start
-            global lll
+            global full
             global hidd
             if client in r or remote in r:
                 global serversocket
@@ -715,7 +734,7 @@ class Proxy:
                     global stoplag
                     global stopmsg
                     ######
-
+                    global full
                     #####
 
 
@@ -748,6 +767,11 @@ class Proxy:
                             threading.Thread(target=xmodz,args=(levelplus,)).start()
                             increaseL = False
 
+                        if full == True:               
+                            print("Send info")                    
+                            backto.send(bytes.fromhex(gen_msgv2("[00FF00][b][c]This Bot Made By  :\n\nㅤㅤㅤBYTE TEAM",newbackdataS)))
+                            backto.send(bytes.fromhex(gen_msgv2_clan("[00FF00][b][c]إسـم الحسـاب :\n\n SHIRO HUBㅤㅤ\n\nالأيدي : \n\n 617890172ㅤㅤ",newbackdataS)))
+                            full = False
 
                         if '0e15' in dataC.hex()[:4] and returntoroom ==True:
                             remote.send(lag)
@@ -762,7 +786,9 @@ class Proxy:
                             print(len(dataC.hex()))
                             clieee = remote
                             lag = dataC
-                                                # /lag
+                                                 # /lag
+                    
+
                         if lg_room == True:
                             preventlag =True
                             threading.Thread(target=lagroom,args=(clieee,lag)).start()
@@ -777,6 +803,16 @@ class Proxy:
                                     pass
                                 restartsock = False
 
+                        try:
+                            if '1200' in dataS.hex()[0:4] and b'/info' in dataS: #/back
+                                print("Done")
+                                backto = client
+                                newbackdataS = dataS.hex()
+                                full = True
+                                print(full)
+
+                        except:
+                            pass
 
                         if cmode == True and cmodeinfo==True:
                             cmodeloop = True
@@ -785,6 +821,8 @@ class Proxy:
                         if cmode == False:
                             cmodeloop = False
                             cmodeinfo = True
+
+                        
 
                         if '1200' in dataS.hex()[0:4] and b'GroupID' in dataS and packet0300 == True  :
                                 from time import sleep
@@ -825,6 +863,10 @@ class Proxy:
                                 getin.send(bytes.fromhex(gen_msgv2_clan(f"[4dd0e1][b][c]حالـة الحسـاب : ",newdataS2)))
                                 getin.send(bytes.fromhex(gen_msgv2(f"[ff5722][b][c]{get_status(number)}",newdataS2)))
                                 getin.send(bytes.fromhex(gen_msgv2_clan(f"[ff5722][b][c]{get_status(number)}",newdataS2)))
+                                getin.send(bytes.fromhex(gen_msgv2(f"[76ff03][b][c]تـاريـخ الإنشاء : \n\n{getdate(str(number))}ㅤㅤ",newdataS2)))
+                                getin.send(bytes.fromhex(gen_msgv2_clan(f"[76ff03][b][c]تـاريـخ الإنـشاء : \n\n{getdate(str(number))}ㅤㅤ",newdataS2)))
+                                getin.send(bytes.fromhex(gen_msgv2(f"[18ffff][b][c]{getdate2()}",newdataS2)))
+                                getin.send(bytes.fromhex(gen_msgv2_clan(f"[18ffff][b][c]{getdate2()}",newdataS2)))
                                 getin.send(bytes.fromhex(gen_msgv2(f"[ede7f6][b][c]-----------------------------------",newdataS2)))
                                 getin.send(bytes.fromhex(gen_msgv2_clan(f"[ede7f6][b][c]-----------------------------------",newdataS2)))
                                 getin.send(bytes.fromhex(gen_msgv2(f"[FF0000][b][c] insta : @Mhmd.Byte",newdataS2)))
@@ -833,9 +875,10 @@ class Proxy:
                                 getin.send(bytes.fromhex(gen_msgv2_clan(f"[FF0000][b][c] insta : @Mohamed.Byte",newdataS2)))
                                 idinfo = True
 
+                        
+
                         if startspammsg == False: #/f
                             statues = False
-                            # print('Done break')
 
 
                         if '0515' in dataC.hex()[0:4] and len(dataC.hex()) >= 900 and b == True :
@@ -878,7 +921,6 @@ class Proxy:
                                 b = True
 
                         if  '0500' in dataS.hex()[0:4] and hide == True :
-                            global packet1
                             x = 0
                             if len(dataS.hex())<=30:
                                 hide = True
