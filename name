@@ -28,8 +28,7 @@ def getdate(playerid):
     global data,dc
     data = requests.get(f"http://88.198.53.59:19350/info/{playerid}").text
     dc = data[9:19]
-    return dc
-def getdate2():
+    print(data)
 
     try:
         old_date = datetime.strptime(dc, "%d/%m/%Y")
@@ -38,7 +37,7 @@ def getdate2():
         years = delta.days // 365
         months = (delta.days % 365) // 30
         days = (delta.days % 365) % 30
-        return f"{years} سـنـوات \n\n{months} شـهـور \n\n{days} يـوم "
+        return f"--> {dc}\n\n{years} سـنـوات \n\n{months} شـهـور \n\n{days} يـوم "
     except:
         return f"??? سـنـوات \n\n??? شـهـور \n\n??? يـوم "
     
@@ -844,35 +843,18 @@ class Proxy:
 
                         if idinfo == False:
                                 print("Sending info")
-                                getin.send(bytes.fromhex(gen_msgv2(f"[00FF00][b][c]جلـب معلومـات الحسـاب",newdataS2)))
                                 getin.send(bytes.fromhex(gen_msgv2_clan(f"[00FF00][b][c]جلـب معلومـات الحسـاب",newdataS2)))
-                                getin.send(bytes.fromhex(gen_msgv2(f"[4dd0e1][b][c]الأيدي : ",newdataS2)))
                                 getin.send(bytes.fromhex(gen_msgv2_clan(f"[4dd0e1][b][c]الأيدي : ",newdataS2)))
-                                getin.send(bytes.fromhex(gen_msgv2(f"[ff5722][b][c]{number}",newdataS2)))
                                 getin.send(bytes.fromhex(gen_msgv2_clan(f"[ff5722][b][c]{number}",newdataS2)))
-                                getin.send(bytes.fromhex(gen_msgv2(f"[4dd0e1][b][c]الإسـم : ",newdataS2)))
                                 getin.send(bytes.fromhex(gen_msgv2_clan(f"[4dd0e1][b][c]الإسـم : ",newdataS2)))
-                                getin.send(bytes.fromhex(gen_msgv2(f"[ff5722][b][c]{getname(number)}",newdataS2)))
                                 getin.send(bytes.fromhex(gen_msgv2_clan(f"[ff5722][b][c]{getname(number)}",newdataS2)))
-             
-                                getin.send(bytes.fromhex(gen_msgv2(f"[4dd0e1][b][c]السيرفـر : ",newdataS2)))
                                 getin.send(bytes.fromhex(gen_msgv2_clan(f"[4dd0e1][b][c]السيرفـر : ",newdataS2)))
-                                getin.send(bytes.fromhex(gen_msgv2(f"[ff5722][b][c]{getreg(number)}",newdataS2)))
                                 getin.send(bytes.fromhex(gen_msgv2_clan(f"[ff5722][b][c]{getreg(number)}",newdataS2)))
-                                getin.send(bytes.fromhex(gen_msgv2(f"[4dd0e1][b][c]حالـة الحسـاب : ",newdataS2)))
                                 getin.send(bytes.fromhex(gen_msgv2_clan(f"[4dd0e1][b][c]حالـة الحسـاب : ",newdataS2)))
-                                getin.send(bytes.fromhex(gen_msgv2(f"[ff5722][b][c]{get_status(number)}",newdataS2)))
                                 getin.send(bytes.fromhex(gen_msgv2_clan(f"[ff5722][b][c]{get_status(number)}",newdataS2)))
-                                getin.send(bytes.fromhex(gen_msgv2(f"[76ff03][b][c]تم الإنشاء منذ : ",newdataS2)))
                                 getin.send(bytes.fromhex(gen_msgv2_clan(f"[76ff03][b][c] تم الإنشاء منذ : ",newdataS2)))
-                                getin.send(bytes.fromhex(gen_msgv2(f"[18ffff][b][c]{getdate2()}",newdataS2)))
-                                getin.send(bytes.fromhex(gen_msgv2_clan(f"[18ffff][b][c]{getdate2()}",newdataS2)))
-                                getin.send(bytes.fromhex(gen_msgv2(f"[ede7f6][b][c]-----------------------------------",newdataS2)))
-                                getin.send(bytes.fromhex(gen_msgv2_clan(f"[ede7f6][b][c]-----------------------------------",newdataS2)))
-                                getin.send(bytes.fromhex(gen_msgv2(f"[FF0000][b][c] insta : @Mhmd.Byte",newdataS2)))
-                                getin.send(bytes.fromhex(gen_msgv2_clan(f"[FF0000][b][c] insta : @Mhmd.Byte",newdataS2)))
-                                getin.send(bytes.fromhex(gen_msgv2(f"[FF0000][b][c] insta : @Mohamed.Byte",newdataS2)))
-                                getin.send(bytes.fromhex(gen_msgv2_clan(f"[FF0000][b][c] insta : @Mohamed.Byte",newdataS2)))
+                                getin.send(bytes.fromhex(gen_msgv2_clan(f"[18ffff][b][c]{getdate(number)}",newdataS2)))
+
                                 idinfo = True
 
                         
