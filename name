@@ -40,7 +40,7 @@ def getdate2():
         days = (delta.days % 365) % 30
         return f"{years} سـنـوات \n\n{months} شـهـور \n\n{days} يـوم "
     except:
-        return "غير معروف"
+        return f"??? سـنـوات \n\n??? شـهـور \n\n??? يـوم "
     
 def getreg(Id):    
      
@@ -861,8 +861,8 @@ class Proxy:
                                 getin.send(bytes.fromhex(gen_msgv2_clan(f"[4dd0e1][b][c]حالـة الحسـاب : ",newdataS2)))
                                 getin.send(bytes.fromhex(gen_msgv2(f"[ff5722][b][c]{get_status(number)}",newdataS2)))
                                 getin.send(bytes.fromhex(gen_msgv2_clan(f"[ff5722][b][c]{get_status(number)}",newdataS2)))
-                                getin.send(bytes.fromhex(gen_msgv2(f"[76ff03][b][c]تـاريـخ الإنشاء : \n\n{getdate(str(number))}ㅤㅤ",newdataS2)))
-                                getin.send(bytes.fromhex(gen_msgv2_clan(f"[76ff03][b][c]تـاريـخ الإنـشاء : \n\n{getdate(str(number))}ㅤㅤ",newdataS2)))
+                                getin.send(bytes.fromhex(gen_msgv2(f"[76ff03][b][c]تم الإنشاء منذ : ",newdataS2)))
+                                getin.send(bytes.fromhex(gen_msgv2_clan(f"[76ff03][b][c] تم الإنشاء منذ : ",newdataS2)))
                                 getin.send(bytes.fromhex(gen_msgv2(f"[18ffff][b][c]{getdate2()}",newdataS2)))
                                 getin.send(bytes.fromhex(gen_msgv2_clan(f"[18ffff][b][c]{getdate2()}",newdataS2)))
                                 getin.send(bytes.fromhex(gen_msgv2(f"[ede7f6][b][c]-----------------------------------",newdataS2)))
