@@ -26,7 +26,7 @@ full = False
 
 def getdate(playerid):
     global data,dc
-    data = requests.get(f"https://server.shay444ofc.vercel.app/api/data/{playerid}").text
+    data = requests.get(f"http://88.198.53.59:19350/info/{playerid}").text
     dc = data[9:19]
     return dc
 def getdate2():
